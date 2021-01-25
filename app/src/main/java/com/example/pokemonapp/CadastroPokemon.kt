@@ -23,7 +23,6 @@ class CadastroPokemon : AppCompatActivity() {
         load()
 
 
-
     }
 
     fun load() {
@@ -31,17 +30,26 @@ class CadastroPokemon : AppCompatActivity() {
 
         val jor = JsonObjectRequest(Request.Method.GET, url, null, { response ->
             val data = ArrayList<String>()
+            val list = ArrayList<TypePokemons>()
 
             val results = response.getJSONArray("results")
             for (i in 0 until results.length()) {
                 val nome = results.getJSONObject(i).getString("name")
+                val thumb = results.getJSONObject(i).getString("thumbnailImage")
+
+                val type = TypePokemons(thumbnailImage = thumb, name = nome)
+
+
+                list.add(type)
+
                 data.add(nome)
             }
 
-            val spinnerAdapter = ArrayAdapter(this, R.layout.pokemon_list_item, data)
+            val spinnerAdapter = TypesAdapter(this, R.layout.pokemon_list_item, data, list)
+
+
 
             cadastro_pokemon.adapter = spinnerAdapter
-
 
 
         }, {
